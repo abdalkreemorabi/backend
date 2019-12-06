@@ -55,16 +55,29 @@ todoRoute.route('/update/:id').post(function (req, res) {
             todo.todo_responsible = req.body.todo_responsible
             todo.todo_priority = req.body.todo_priority
             todo.todo_completed = req.body.todo_completed
+        
 
             todo.save().then(todo => {
-                res.json('Todo updated')
+               res.json('Todo updated')
+        })
+            .catch(err => {
+                res.status(400).send('update not possible')
             })
-                .catch(err => {
-                    res.status(400).send('update not possible')
-                })
-        
+
     });
+
 });
+todoRoute.route('/:id').delete(function (req, res) {
+    let id = req.params.id
+    Todo.findById(id).deleteOne(function(err,data){
+       if(err) throw err
+       res.status(200).json(data)
+    })
+    
+
+});
+
+
 
 
 app.use('/todos', todoRoute);
